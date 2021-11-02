@@ -1,1 +1,1 @@
-A GUI Sudoku game waith a computer solver using backtracking algorithm
+A GUI Sudoku board game waith a computer solver using backtracking algorithm
