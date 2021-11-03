@@ -14,16 +14,60 @@ board = [
 
 def main():
     print_board(board)
-    
-    pos = {
-        "x": 2,
-        "y": 0
-    }
-    num = 3
-    
-    result = valid(board, num, pos)
-    print(result)
+    print()
+    print()
+    solve(board)
+    print_board(board)
 
+# solve sudoku board using BackTracking Algorithm
+def solve(b):
+    find = find_empty(b)
+    if not find:
+        return True
+    
+    for i in range(1, 10):
+        if valid(b, i, find):
+            b[find[0]][find[1]] = i
+            
+            if solve(b):
+                return True
+            
+            b[find[0]][find[1]] = 0
+    
+    return False
+
+# check number validity on given x,y position in board
+def valid(b, num, pos):
+    #check validity in row
+    for i in range(len(b[pos[0]])):
+        if b[pos[0]][i] == num and i != pos[1]:
+            return False
+    
+    # check validity in column
+    for i in range(len(b)):
+        if b[i][pos[1]] == num and i != pos[0]:
+            return False
+    
+    # check validity in box
+    box = {
+        "x": pos[1] // 3,
+        "y": pos[0] // 3
+    }
+    
+    for i in range(box["y"] * 3 , box["y"] * 3 + 3):
+        for j in range(box["x"] * 3 , box["x"] * 3 + 3):
+            if b[i][j] == num and (i,j) != pos:
+                return False
+    
+    return True
+
+def find_empty(b):
+    for i in range(len(b)):
+        for j in range(len(b[i])):
+            if b[i][j] == 0:
+                return (i, j) # row, column
+    
+    return None
 
 def print_board(b):
     print()
@@ -40,32 +84,6 @@ def print_board(b):
             else:
                 print(str(b[i][j]) + " ", end="")
     print()
-
-# check number validity on given x,y position in board
-def valid(b, num, pos):
-    #check validity in row
-    for i in range(len(b[pos["y"]])):
-        if b[pos["y"]][i] == num and i != pos["x"]:
-            return False
-    
-    # check validity in column
-    for i in range(len(b)):
-        if b[i][pos["x"]] == num and i != pos["y"]:
-            return False
-    
-    # check validity in box
-    box = {
-        "x": pos["x"] // 3,
-        "y": pos["y"] // 3
-    }
-    
-    for i in range(box["y"] * 3 , box["y"] * 3 + 3):
-        for j in range(box["x"] * 3 , box["x"] * 3 + 3):
-            if b[i][j] == num and (i != pos["x"] or j != pos["y"]):
-                return False
-    
-    return True
-
 
 if __name__ == "__main__":
     main()
